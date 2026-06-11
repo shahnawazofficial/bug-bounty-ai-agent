@@ -54,6 +54,8 @@ export const vulnAPI = {
     limit?: number;
   }) => api.get('/vulnerabilities', { params }),
   getOne: (id: number) => api.get(`/vulnerabilities/${id}`),
+  getExplanation: (id: number) => api.get(`/vulnerabilities/${id}/explain`),
+  getRemediation: (id: number) => api.get(`/vulnerabilities/${id}/remediate`),
 };
 
 export const dashboardAPI = {
