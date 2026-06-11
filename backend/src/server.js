@@ -16,8 +16,8 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://bugbountai.in',
-  'https://www.bugbountai.in',
+  'https://bugbountyai.in',
+  'https://www.bugbountyai.in',
   'http://localhost:5173',
 ];
 app.use(cors({
