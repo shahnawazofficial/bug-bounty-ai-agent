@@ -1,5 +1,17 @@
 name: bug-bounty-ai-agent
-region: blr  # Bangalore - closest to India
+region: blr
+ingress:
+  rules:
+    - component:
+        name: frontend
+      match:
+        path:
+          prefix: /
+    - component:
+        name: backend
+      match:
+        path:
+          prefix: /api
 services:
   - name: backend
     source_dir: /backend
@@ -8,7 +20,7 @@ services:
       branch: main
       deploy_on_push: true
     run_command: node src/server.js
-    build_command: npm install && npx prisma generate && npx prisma migrate deploy
+    build_command: npm install && npx prisma generate --config prisma.config.js && npx prisma migrate deploy --config prisma.config.js
     environment_slug: node-js
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-0.5gb
@@ -34,9 +46,6 @@ services:
         type: SECRET
       - key: DATABASE_URL
         value: ${db.DATABASE_URL}
-    routes:
-      - path: /
-
 static_sites:
   - name: frontend
     source_dir: /frontend
@@ -49,11 +58,8 @@ static_sites:
     environment_slug: node-js
     envs:
       - key: VITE_API_URL
-        value: https://api.bugbountyai.in/api
-    routes:
-      - path: /
+        value: ${APP_URL}/api
     catchall_document: index.html
-
 databases:
   - name: db
     engine: PG
