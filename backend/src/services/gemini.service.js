@@ -1,6 +1,9 @@
 const axios = require('axios');
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
+// gemini-2.5-flash confirmed working with this API key
+const GEMINI_MODEL = 'gemini-2.5-flash';
+
 
 /**
  * Call Gemini API with a prompt
@@ -9,8 +12,10 @@ async function callGemini(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not configured');
 
+  const url = `${GEMINI_BASE}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
   const response = await axios.post(
-    `${GEMINI_API_URL}?key=${apiKey}`,
+    url,
     {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
