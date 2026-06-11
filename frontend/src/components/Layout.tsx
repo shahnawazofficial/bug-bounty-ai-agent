@@ -123,14 +123,10 @@ export default function Layout({ children }: Props) {
           justifyContent: isCollapsed ? 'center' : 'flex-start',
           gap: 10, flexShrink: 0
         }}>
-          <div style={{
+          <img src="/buglogo.png" alt="Bug Bounty AI" style={{
             width: 30, height: 30, borderRadius: 8,
-            background: 'var(--accent)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, boxShadow: '0 0 16px rgba(0, 255, 157, 0.4)'
-          }}>
-            <Shield size={15} color="#000" strokeWidth={2.5} />
-          </div>
+            objectFit: 'cover', flexShrink: 0, boxShadow: '0 0 16px rgba(0, 255, 157, 0.4)'
+          }} />
           {!isCollapsed && (
             <div style={{ overflow: 'hidden' }}>
               <div style={{

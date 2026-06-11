@@ -28,14 +28,10 @@ export default function LoginPage() {
         background: 'rgba(5, 5, 5, 0.8)', backdropFilter: 'blur(12px)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
+          <img src="/buglogo.png" alt="Bug Bounty AI" style={{
             width: 30, height: 30, borderRadius: 8,
-            background: 'var(--accent)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0, 255, 157, 0.35)'
-          }}>
-            <Shield size={16} color="#000" strokeWidth={2.5} />
-          </div>
+            objectFit: 'cover', boxShadow: '0 0 16px rgba(0, 255, 157, 0.35)'
+          }} />
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', color: '#fff' }}>
             Bug Bounty AI
           </span>
@@ -153,9 +149,10 @@ export default function LoginPage() {
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               padding: '16px 0', gap: 20, background: 'var(--bg-secondary)'
             }}>
-              <div style={{ width: 28, height: 28, borderRadius: 6, background: 'var(--accent-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Shield size={14} style={{ color: 'var(--accent)' }} />
-              </div>
+              <img src="/buglogo.png" alt="Bug Bounty AI" style={{
+                width: 28, height: 28, borderRadius: 6,
+                objectFit: 'cover', boxShadow: '0 0 12px rgba(0, 255, 157, 0.25)'
+              }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14, flex: 1, width: '100%', alignItems: 'center' }}>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', borderLeft: '2px solid var(--accent)', color: 'var(--accent)' }}>
                   <Target size={16} />
