@@ -76,8 +76,13 @@ const githubCallback = async (req, res) => {
 
     res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
   } catch (error) {
-    console.error('GitHub OAuth error:', error.message);
-    res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
+    console.error('=== GitHub OAuth Error ===');
+    console.error('Message:', error.message);
+    console.error('Status:', error?.response?.status);
+    console.error('Response data:', JSON.stringify(error?.response?.data));
+    console.error('Stack:', error.stack);
+    const errorCode = error?.response?.data?.error || error?.code || 'oauth_failed';
+    res.redirect(`${process.env.FRONTEND_URL}/login?error=${errorCode}`);
   }
 };
 

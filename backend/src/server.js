@@ -39,6 +39,20 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString(), service: 'Bug Bounty AI Agent API' });
 });
 
+// Debug endpoint (non-sensitive)
+app.get('/api/debug/env', (req, res) => {
+  res.json({
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: process.env.PORT,
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
+    HAS_GITHUB_CLIENT_ID: !!process.env.GITHUB_CLIENT_ID,
+    HAS_GITHUB_CLIENT_SECRET: !!process.env.GITHUB_CLIENT_SECRET,
+    HAS_JWT_SECRET: !!process.env.JWT_SECRET,
+    HAS_DATABASE_URL: !!process.env.DATABASE_URL,
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/repos', repoRoutes);
