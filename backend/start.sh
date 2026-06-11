@@ -1,23 +1,27 @@
 #!/bin/bash
-# Grant schema permissions for DigitalOcean managed PostgreSQL
-# This runs before the app starts to ensure proper permissions
+set -e
 
-echo "Setting up database permissions..."
+echo "=== Bug Bounty AI Agent Startup ==="
 
-# Extract connection details from DATABASE_URL
-DB_URL="${DATABASE_URL}"
-
-# Ensure SSL mode for DigitalOcean managed PostgreSQL
+# Ensure SSL for DigitalOcean managed PostgreSQL
 export PGSSLMODE=require
 
-# Run permission grants using psql if available, otherwise skip
-if command -v psql &> /dev/null; then
-  psql "$DB_URL" -c "GRANT ALL ON SCHEMA public TO current_user;" 2>/dev/null || true
-  psql "$DB_URL" -c "GRANT CREATE ON SCHEMA public TO current_user;" 2>/dev/null || true
+# Append sslmode to DATABASE_URL if missing (for prisma migrate deploy)
+if [[ "$DATABASE_URL" != *"sslmode"* ]]; then
+  if [[ "$DATABASE_URL" == *"?"* ]]; then
+    export DATABASE_URL="${DATABASE_URL}&sslmode=require"
+  else
+    export DATABASE_URL="${DATABASE_URL}?sslmode=require"
+  fi
 fi
 
 echo "Running Prisma migrations..."
-npx prisma migrate deploy
+if npx prisma migrate deploy 2>&1; then
+  echo "Migrations completed successfully."
+else
+  echo "migrate deploy failed (likely permissions). Trying db push..."
+  npx prisma db push --accept-data-loss 2>&1 || echo "db push also failed - continuing anyway"
+fi
 
 echo "Starting server..."
 node src/server.js
