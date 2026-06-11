@@ -1,0 +1,44 @@
+name: bugbountyai-backend
+region: blr
+services:
+  - name: backend
+    source_dir: /backend
+    github:
+      repo: shahnawazofficial/bug-bounty-ai-agent
+      branch: main
+      deploy_on_push: true
+    run_command: node src/server.js
+    build_command: npm install && npx prisma generate --config prisma.config.js && npx prisma migrate deploy --config prisma.config.js
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    http_port: 3001
+    health_check:
+      http_path: /health
+    routes:
+      - path: /
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: GITHUB_CLIENT_ID
+        value: Ov23lihmOdL8t5dNBYGZ
+      - key: GITHUB_CLIENT_SECRET
+        value: be464af0f49947d61823e91d846cd8d07f970ec0
+        type: SECRET
+      - key: GITHUB_CALLBACK_URL
+        value: https://api.bugbountyai.in/api/auth/github/callback
+      - key: FRONTEND_URL
+        value: https://bugbountyai.in
+      - key: JWT_SECRET
+        value: b0ug-b0unty-@1-@gent-sup3r-s3cr3t-jwt-k3y-2026
+        type: SECRET
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+databases:
+  - name: db
+    engine: PG
+    version: "17"
+    size: db-s-dev-database
+    num_nodes: 1

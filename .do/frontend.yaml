@@ -1,0 +1,16 @@
+name: bugbountyai-frontend
+region: blr
+static_sites:
+  - name: frontend
+    source_dir: /frontend
+    github:
+      repo: shahnawazofficial/bug-bounty-ai-agent
+      branch: main
+      deploy_on_push: true
+    build_command: npm install && npm run build
+    output_dir: dist
+    environment_slug: node-js
+    catchall_document: index.html
+    envs:
+      - key: VITE_API_URL
+        value: https://api.bugbountyai.in/api
