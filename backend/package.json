@@ -1,0 +1,23 @@
+{
+  "name": "bug-bounty-backend",
+  "version": "1.0.0",
+  "description": "Bug Bounty AI Agent Backend API",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "build": "npx prisma generate",
+    "postinstall": "npx prisma generate",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:generate": "npx prisma generate",
+    "db:studio": "npx prisma studio",
+    "db:push": "npx prisma db push"
+  },
+  "keywords": [],
+  "author": "shahnawazofficial",
+  "license": "MIT",
+  "type": "commonjs"
+}

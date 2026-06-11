@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  githubId     String         @unique
+  username     String
+  email        String?
+  avatarUrl    String?
+  accessToken  String?
+  createdAt    DateTime       @default(now())
+  repositories Repository[]
+}
+
+model Repository {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  repositoryName  String
+  repositoryUrl   String
+  fullName        String
+  securityScore   Int       @default(100)
+  lastScanDate    DateTime?
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scans           Scan[]
+}
+
+model Scan {
+  id              Int             @id @default(autoincrement())
+  repositoryId    Int
+  scanDate        DateTime        @default(now())
+  status          ScanStatus      @default(PENDING)
+  repository      Repository      @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  vulnerabilities Vulnerability[]
+}
+
+model Vulnerability {
+  id            Int      @id @default(autoincrement())
+  scanId        Int
+  title         String
+  severity      Severity
+  description   String
+  filePath      String?
+  lineNumber    Int?
+  scannerSource String
+  remediation   String?
+  ruleId        String?
+  createdAt     DateTime @default(now())
+  scan          Scan     @relation(fields: [scanId], references: [id], onDelete: Cascade)
+}
+
+enum ScanStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum Severity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFO
+}

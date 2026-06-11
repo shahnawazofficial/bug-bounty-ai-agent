@@ -1,0 +1,10 @@
+# Railway deployment config for Bug Bounty AI Agent Backend
+[build]
+  builder = "NIXPACKS"
+
+[deploy]
+  startCommand = "node src/server.js"
+  healthcheckPath = "/health"
+  healthcheckTimeout = 30
+  restartPolicyType = "ON_FAILURE"
+  restartPolicyMaxRetries = 3
