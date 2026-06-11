@@ -61,13 +61,6 @@ export default function LoginPage() {
 
         {/* Right Action */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{
-            fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)',
-            background: 'rgba(0, 255, 157, 0.08)', border: '1px solid rgba(0, 255, 157, 0.25)',
-            padding: '3px 8px', borderRadius: 4, textTransform: 'uppercase'
-          }}>
-            SYSTEM: ONLINE
-          </span>
           <button
             onClick={login}
             disabled={isLoading}
