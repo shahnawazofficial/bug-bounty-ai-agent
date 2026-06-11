@@ -9,6 +9,7 @@ import RepositoriesPage from './pages/RepositoriesPage';
 import RepositoryDetailPage from './pages/RepositoryDetailPage';
 import VulnerabilitiesPage from './pages/VulnerabilitiesPage';
 import VulnerabilityDetailPage from './pages/VulnerabilityDetailPage';
+import HowItWorksPage from './pages/HowItWorksPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, isLoading } = useAuth();
@@ -39,6 +40,9 @@ function AppRoutes() {
       <Route path="/repositories/:id" element={<ProtectedRoute><RepositoryDetailPage /></ProtectedRoute>} />
       <Route path="/vulnerabilities" element={<ProtectedRoute><VulnerabilitiesPage /></ProtectedRoute>} />
       <Route path="/vulnerabilities/:id" element={<ProtectedRoute><VulnerabilityDetailPage /></ProtectedRoute>} />
+      
+      {/* How it Works - dynamically renders standalone or inside layout */}
+      <Route path="/how-it-works" element={token ? <ProtectedRoute><HowItWorksPage /></ProtectedRoute> : <HowItWorksPage />} />
 
       <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
