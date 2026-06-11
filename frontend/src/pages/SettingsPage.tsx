@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Shield, Bell, Lock, Key, Save, Check, LogOut, GitBranch, Mail, Calendar } from 'lucide-react';
+import { User, Shield, Bell, Lock, Key, Save, Check, LogOut, GitBranch, Mail, Calendar, CreditCard, Users, Link2, Eye, EyeOff } from 'lucide-react';
 
-type Tab = 'profile' | 'security' | 'notifications' | 'account';
+type Tab = 'profile' | 'account' | 'security' | 'notifications' | 'billing' | 'api' | 'team' | 'integrations';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#0a0f1d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: 24, marginBottom: 16 }}>
-      <h3 style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 20, fontFamily: 'Space Grotesk, sans-serif' }}>{title}</h3>
+    <div className="card" style={{ background: 'var(--bg-card)', padding: 24, marginBottom: 16 }}>
+      <h3 style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 20, fontFamily: 'var(--font-display)' }}>{title}</h3>
       {children}
     </div>
   );
@@ -16,32 +16,25 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <div style={{ marginBottom: 20 }}>
-      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#9ca3af', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</label>
+      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
       {children}
-      {hint && <p style={{ fontSize: 11, color: '#4b5563', marginTop: 6, lineHeight: 1.4 }}>{hint}</p>}
+      {hint && <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.45 }}>{hint}</p>}
     </div>
   );
 }
 
 function Toggle({ label, desc, checked, onChange }: { label: string; desc: string; checked: boolean; onChange: () => void }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border-subtle)' }}>
       <div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6', marginBottom: 2 }}>{label}</div>
-        <div style={{ fontSize: 11, color: '#6b7280' }}>{desc}</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{label}</div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{desc}</div>
       </div>
       <button
         onClick={onChange}
-        style={{
-          width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer',
-          background: checked ? '#6366f1' : 'rgba(255,255,255,0.08)',
-          position: 'relative', transition: 'background 0.2s', flexShrink: 0
-        }}
+        className={`toggle-track ${checked ? 'on' : ''}`}
       >
-        <span style={{
-          position: 'absolute', top: 3, left: checked ? 23 : 3, width: 18, height: 18,
-          borderRadius: '50%', background: '#fff', transition: 'left 0.2s', display: 'block'
-        }} />
+        <span className="toggle-thumb" />
       </button>
     </div>
   );
@@ -53,15 +46,12 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [displayName, setDisplayName] = useState(user?.username || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [apiKeyVisible, setApiKeyVisible] = useState(false);
   const [notifs, setNotifs] = useState({
     scanComplete: true,
     criticalVulns: true,
     weeklyReport: false,
     newFeatures: true,
-  });
-  const [privacy, setPrivacy] = useState({
-    publicProfile: false,
-    shareStats: false,
   });
 
   const handleSave = () => {
@@ -70,20 +60,24 @@ export default function SettingsPage() {
   };
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: 'profile', label: 'Profile', icon: <User size={15} /> },
-    { id: 'security', label: 'Security', icon: <Shield size={15} /> },
+    { id: 'profile', label: 'Profile Settings', icon: <User size={15} /> },
+    { id: 'account', label: 'Account Details', icon: <Lock size={15} /> },
+    { id: 'security', label: 'Shield & Security', icon: <Shield size={15} /> },
     { id: 'notifications', label: 'Notifications', icon: <Bell size={15} /> },
-    { id: 'account', label: 'Account', icon: <Lock size={15} /> },
+    { id: 'billing', label: 'Billing & Plan', icon: <CreditCard size={15} /> },
+    { id: 'api', label: 'API Credentials', icon: <Key size={15} /> },
+    { id: 'team', label: 'Team Members', icon: <Users size={15} /> },
+    { id: 'integrations', label: 'Integrations', icon: <Link2 size={15} /> },
   ];
 
   return (
-    <div style={{ padding: '32px 40px', color: '#f3f4f6', maxWidth: 900 }} className="animate-fadeIn">
+    <div className="page cyber-grid" style={{ maxWidth: 1000 }}>
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#fff' }}>Settings</h1>
-        <p style={{ color: '#6b7280', fontSize: 13, marginTop: 4 }}>Manage your account preferences and security settings</p>
+        <h1 className="page-title">Platform Preferences</h1>
+        <p className="page-subtitle">Configure developer workspace settings, notifications, teams and credential keys</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr)) 3fr', gap: 24 }}>
         {/* Sidebar Tabs */}
         <div>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -95,11 +89,11 @@ export default function SettingsPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '10px 14px', borderRadius: 8, border: 'none',
-                  background: activeTab === tab.id ? 'rgba(99,102,241,0.1)' : 'transparent',
-                  color: activeTab === tab.id ? '#818cf8' : '#6b7280',
+                  background: activeTab === tab.id ? 'rgba(0, 255, 157, 0.07)' : 'transparent',
+                  color: activeTab === tab.id ? 'var(--accent)' : 'var(--text-muted)',
                   fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  textAlign: 'left', transition: 'all 0.2s', fontFamily: 'Inter, sans-serif',
-                  borderLeft: `2px solid ${activeTab === tab.id ? '#6366f1' : 'transparent'}`,
+                  textAlign: 'left', transition: 'all 0.15s', fontFamily: 'var(--font-sans)',
+                  borderLeft: `2px solid ${activeTab === tab.id ? 'var(--accent)' : 'transparent'}`,
                 }}
               >
                 {tab.icon} {tab.label}
@@ -112,75 +106,107 @@ export default function SettingsPage() {
         <div>
           {activeTab === 'profile' && (
             <div className="animate-fadeIn">
-              <Section title="Profile Information">
+              <Section title="Profile Overview">
                 {/* Avatar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, padding: 16, background: 'rgba(255,255,255,0.02)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, padding: 16, background: 'var(--bg-secondary)', borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
                   <div style={{ position: 'relative' }}>
                     {user?.avatarUrl ? (
-                      <img src={user.avatarUrl} alt={user.username} style={{ width: 64, height: 64, borderRadius: '50%', border: '2px solid rgba(99,102,241,0.3)' }} />
+                      <img src={user.avatarUrl} alt={user.username} style={{ width: 56, height: 56, borderRadius: '50%', border: '2px solid var(--accent)' }} />
                     ) : (
-                      <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <User size={28} color="white" />
+                      <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--accent-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <User size={24} style={{ color: 'var(--accent)' }} />
                       </div>
                     )}
-                    <div style={{ position: 'absolute', bottom: 0, right: 0, width: 18, height: 18, borderRadius: '50%', background: '#10b981', border: '2px solid #0a0f1d' }} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{user?.username}</div>
-                    <div style={{ fontSize: 12, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <GitBranch size={12} /> Connected via GitHub
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{user?.username}</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <GitBranch size={11} style={{ color: 'var(--accent)' }} /> Connected via GitHub
                     </div>
                   </div>
                 </div>
 
-                <Field label="Display Name" hint="This is how your name appears across the platform.">
-                  <input className="input" value={displayName} onChange={e => setDisplayName(e.target.value)} id="settings-display-name" placeholder="Your display name" />
+                <Field label="Profile Display Name" hint="How you appear on dashboards and logs.">
+                  <input className="input" value={displayName} onChange={e => setDisplayName(e.target.value)} id="settings-display-name" placeholder="E.g. Aryan Singh" />
                 </Field>
 
-                <Field label="Email Address" hint="Used for notifications and security alerts.">
+                <Field label="Primary Contact Email" hint="Receives scan summaries, threat notices, and billing invoices.">
                   <input className="input" value={email} onChange={e => setEmail(e.target.value)} id="settings-email" placeholder="your@email.com" type="email" />
                 </Field>
 
-                <Field label="GitHub Username">
+                <Field label="System Git Association">
                   <input className="input" value={user?.username || ''} disabled id="settings-github-username"
                     style={{ opacity: 0.5, cursor: 'not-allowed' }} />
                 </Field>
 
-                <button onClick={handleSave} id="settings-save-profile" style={{ display: 'flex', alignItems: 'center', gap: 8, background: saved ? 'linear-gradient(135deg, #059669, #10b981)' : 'linear-gradient(135deg, #1d4ed8, #2563eb)', border: 'none', padding: '10px 20px', borderRadius: 8, color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'all 0.3s' }}>
-                  {saved ? <><Check size={14} /> Saved!</> : <><Save size={14} /> Save Changes</>}
+                <button onClick={handleSave} className="btn btn-primary" id="settings-save-profile">
+                  {saved ? <><Check size={14} /> Saved Settings</> : <><Save size={14} /> Commit Changes</>}
                 </button>
+              </Section>
+            </div>
+          )}
+
+          {activeTab === 'account' && (
+            <div className="animate-fadeIn">
+              <Section title="Account Identity Info">
+                {[
+                  { icon: <GitBranch size={14} />, label: 'GitHub Identity key', value: `@${user?.username}` },
+                  { icon: <Mail size={14} />, label: 'Alert Mailbox', value: user?.email || 'N/A' },
+                  { icon: <Calendar size={14} />, label: 'Activated On', value: user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A' },
+                  { icon: <Shield size={14} />, label: 'Active Plan', value: 'Free Developer Tier' },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: i < 3 ? '1px solid var(--border-subtle)' : 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-secondary)', fontSize: 13 }}>
+                      {item.icon} {item.label}
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{item.value}</span>
+                  </div>
+                ))}
+              </Section>
+
+              <Section title="Danger Zone Operations">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 14, background: 'var(--bg-secondary)', borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6', marginBottom: 2 }}>Close Session</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Terminate session token</div>
+                    </div>
+                    <button onClick={logout} className="btn btn-secondary btn-sm" id="settings-logout-btn">
+                      <LogOut size={13} /> Sign Out
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 14, background: 'var(--sev-critical-bg)', borderRadius: 10, border: '1px solid var(--sev-critical-border)' }}>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--sev-critical)', marginBottom: 2 }}>Erase Dashboard Data</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Irreversibly delete scanning profiles</div>
+                    </div>
+                    <button className="btn btn-danger btn-sm" onClick={() => alert('Confirm account erasure?')}>
+                      Erase Account
+                    </button>
+                  </div>
+                </div>
               </Section>
             </div>
           )}
 
           {activeTab === 'security' && (
             <div className="animate-fadeIn">
-              <Section title="Security Settings">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 16, background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 10, marginBottom: 20 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Shield size={18} style={{ color: '#34d399' }} />
+              <Section title="Workspace Cryptography & Shields">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: 16, background: 'rgba(0, 255, 157, 0.05)', border: '1px solid rgba(0, 255, 157, 0.25)', borderRadius: 10, marginBottom: 20 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'var(--accent-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Shield size={16} style={{ color: 'var(--accent)' }} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#34d399', marginBottom: 2 }}>GitHub OAuth Active</div>
-                    <div style={{ fontSize: 12, color: '#6b7280' }}>Your account is secured with GitHub OAuth. No password required.</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', marginBottom: 2 }}>GitHub OAuth Handshake Verified</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>You sign in through GitHub securely. No passwords are persisted.</div>
                   </div>
                 </div>
 
-                <Field label="API Token" hint="Use this token to authenticate with the Bug Bounty AI API.">
-                  <div style={{ display: 'flex', gap: 10 }}>
-                    <input className="input" type="password" value="••••••••••••••••••••••••••••••••" readOnly id="settings-api-token" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: 2 }} />
-                    <button style={{ padding: '10px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, color: '#9ca3af', fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif' }}>
-                      Reveal
-                    </button>
-                  </div>
-                </Field>
-
-                <div style={{ padding: 16, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 10 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#f87171', marginBottom: 4 }}>Danger Zone</div>
-                  <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 14, lineHeight: 1.5 }}>Revoking access will sign you out from all sessions. You will need to reconnect your GitHub account.</p>
-                  <button style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', padding: '8px 16px', borderRadius: 8, color: '#f87171', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
-                    <Key size={13} /> Revoke All Sessions
-                  </button>
+                <div style={{ padding: 16, background: 'var(--bg-secondary)', border: '1px solid var(--border-default)', borderRadius: 10 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Access Scopes</div>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    Bug Bounty AI Agent has read-only integration to inspect workflow files, manifest dependencies and semgrep alerts.
+                  </p>
                 </div>
               </Section>
             </div>
@@ -188,14 +214,14 @@ export default function SettingsPage() {
 
           {activeTab === 'notifications' && (
             <div className="animate-fadeIn">
-              <Section title="Notification Preferences">
-                <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 20, lineHeight: 1.5 }}>Choose which notifications you want to receive about your security scans and account activity.</p>
-                <Toggle label="Scan Complete" desc="Notify me when a repository scan finishes" checked={notifs.scanComplete} onChange={() => setNotifs(n => ({ ...n, scanComplete: !n.scanComplete }))} />
-                <Toggle label="Critical Vulnerabilities" desc="Alert me immediately when critical vulnerabilities are found" checked={notifs.criticalVulns} onChange={() => setNotifs(n => ({ ...n, criticalVulns: !n.criticalVulns }))} />
-                <Toggle label="Weekly Security Report" desc="Receive a weekly summary of your security posture" checked={notifs.weeklyReport} onChange={() => setNotifs(n => ({ ...n, weeklyReport: !n.weeklyReport }))} />
-                <Toggle label="New Features & Updates" desc="Stay informed about Bug Bounty AI platform updates" checked={notifs.newFeatures} onChange={() => setNotifs(n => ({ ...n, newFeatures: !n.newFeatures }))} />
+              <Section title="Email Scan Notifications">
+                <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 20, lineHeight: 1.5 }}>Choose which notifications you want to receive about your security scans and account activity.</p>
+                <Toggle label="Scan Operation Finished" desc="Notify me via email when Semgrep checks finish" checked={notifs.scanComplete} onChange={() => setNotifs(n => ({ ...n, scanComplete: !n.scanComplete }))} />
+                <Toggle label="Critical Findings Exposed" desc="Alert immediately if hardcoded keys or critical issues are detected" checked={notifs.criticalVulns} onChange={() => setNotifs(n => ({ ...n, criticalVulns: !n.criticalVulns }))} />
+                <Toggle label="Weekly Security Summary" desc="Receive consolidated vulnerability chart audits" checked={notifs.weeklyReport} onChange={() => setNotifs(n => ({ ...n, weeklyReport: !n.weeklyReport }))} />
+                <Toggle label="Platform & Scanner Rules Updates" desc="Alert me when Semgrep or Trivy indexes update" checked={notifs.newFeatures} onChange={() => setNotifs(n => ({ ...n, newFeatures: !n.newFeatures }))} />
                 <div style={{ marginTop: 20 }}>
-                  <button onClick={handleSave} id="settings-save-notifs" style={{ display: 'flex', alignItems: 'center', gap: 8, background: saved ? 'linear-gradient(135deg, #059669, #10b981)' : 'linear-gradient(135deg, #1d4ed8, #2563eb)', border: 'none', padding: '10px 20px', borderRadius: 8, color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'all 0.3s' }}>
+                  <button onClick={handleSave} className="btn btn-primary">
                     {saved ? <><Check size={14} /> Saved!</> : <><Save size={14} /> Save Preferences</>}
                   </button>
                 </div>
@@ -203,45 +229,84 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {activeTab === 'account' && (
+          {activeTab === 'billing' && (
             <div className="animate-fadeIn">
-              <Section title="Account Details">
-                {[
-                  { icon: <GitBranch size={14} />, label: 'GitHub Account', value: `@${user?.username}` },
-                  { icon: <Mail size={14} />, label: 'Email', value: user?.email || 'Not provided' },
-                  { icon: <Calendar size={14} />, label: 'Member Since', value: user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—' },
-                  { icon: <Shield size={14} />, label: 'Plan', value: 'Free' },
-                ].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#6b7280', fontSize: 13 }}>
-                      {item.icon} {item.label}
-                    </div>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6' }}>{item.value}</span>
+              <Section title="Subscription Plan & Billing Profile">
+                <div style={{ padding: 16, background: 'var(--bg-secondary)', border: '1px solid var(--border-default)', borderRadius: 10, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>Free Security Tier</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>5 Repositories limit • Standard Scanners</div>
                   </div>
-                ))}
-              </Section>
+                  <button className="btn btn-primary btn-sm" onClick={() => setActiveTab('billing')}>
+                    Upgrade Plan
+                  </button>
+                </div>
 
-              <Section title="Account Actions">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16, background: 'rgba(255,255,255,0.02)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6', marginBottom: 2 }}>Sign Out</div>
-                      <div style={{ fontSize: 11, color: '#6b7280' }}>Sign out from your current session</div>
-                    </div>
-                    <button onClick={logout} id="settings-logout-btn" style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: 8, color: '#9ca3af', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
-                      <LogOut size={14} /> Sign Out
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)' }}>Invoice History</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>No invoices found. Subscriptions will generate records here.</div>
+                </div>
+              </Section>
+            </div>
+          )}
+
+          {activeTab === 'api' && (
+            <div className="animate-fadeIn">
+              <Section title="Workspace API Credentials">
+                <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 16 }}>Use these keys to trigger scans from GitHub Actions or local CLI integrations.</p>
+                <Field label="Bearer API Secret token">
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <input className="input" type={apiKeyVisible ? 'text' : 'password'} value="bb_live_a1b2c3d4e5f6g7h8i9j0k1l2m3n4" readOnly style={{ fontFamily: 'var(--font-mono)' }} />
+                    <button className="btn btn-ghost" onClick={() => setApiKeyVisible(!apiKeyVisible)}>
+                      {apiKeyVisible ? <EyeOff size={14} /> : <Eye size={14} />}
                     </button>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16, background: 'rgba(239,68,68,0.04)', borderRadius: 10, border: '1px solid rgba(239,68,68,0.12)' }}>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#f87171', marginBottom: 2 }}>Delete Account</div>
-                      <div style={{ fontSize: 11, color: '#6b7280' }}>Permanently delete your account and all data</div>
-                    </div>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', padding: '8px 16px', borderRadius: 8, color: '#f87171', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
-                      Delete Account
-                    </button>
+                </Field>
+                <button className="btn btn-ghost btn-sm" onClick={() => alert('Generating new workspace key...')}>
+                  Generate New Token
+                </button>
+              </Section>
+            </div>
+          )}
+
+          {activeTab === 'team' && (
+            <div className="animate-fadeIn">
+              <Section title="Team Collaboration Members">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Invite developers to collaborate on vulnerability remediation audits.</p>
+                  <button className="btn btn-primary btn-sm" onClick={() => alert('Invite member modal')}>
+                    Add Member
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: 8 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: '#fff' }}>{user?.username || 'You'}</div>
+                    <span className="badge badge-success">Workspace Owner</span>
                   </div>
                 </div>
+              </Section>
+            </div>
+          )}
+
+          {activeTab === 'integrations' && (
+            <div className="animate-fadeIn">
+              <Section title="Third-Party Integrations">
+                {[
+                  { name: 'GitHub Integration', desc: 'Read code paths and scan pull requests', active: true },
+                  { name: 'Slack Alerts Hook', desc: 'Send alerts to channels when scans finish', active: false },
+                  { name: 'Jira Cloud Sync', desc: 'Sync vulnerability tickets to boards', active: false },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: i < 2 ? '1px solid var(--border-subtle)' : 'none' }}>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#fff' }}>{item.name}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{item.desc}</div>
+                    </div>
+                    <button className={`btn ${item.active ? 'btn-ghost' : 'btn-primary'} btn-sm`}>
+                      {item.active ? 'Configured' : 'Integrate'}
+                    </button>
+                  </div>
+                ))}
               </Section>
             </div>
           )}

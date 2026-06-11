@@ -30,8 +30,12 @@ export default function AuthCallbackPage() {
       minHeight: '100vh', background: 'var(--bg-primary)',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20,
     }}>
-      <div style={{ width: 56, height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #1d4ed8, #7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Shield size={28} color="white" />
+      <div style={{
+        width: 56, height: 56, borderRadius: 16, background: 'var(--accent)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 0 24px rgba(0, 255, 157, 0.3)'
+      }}>
+        <Shield size={28} color="black" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <div className="spinner" />

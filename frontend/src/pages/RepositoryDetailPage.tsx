@@ -1,33 +1,33 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { repoAPI, scanAPI } from '../services/api';
-import { ArrowLeft, Play, Shield, AlertTriangle, Clock, ExternalLink, Loader2, CheckCircle2, XCircle, Zap } from 'lucide-react';
+import { ArrowLeft, Play, Shield, AlertTriangle, Clock, ExternalLink, Loader2, CheckCircle2, Zap } from 'lucide-react';
 
 function getScoreColor(score: number) {
-  if (score >= 80) return '#10b981';
-  if (score >= 60) return '#eab308';
-  if (score >= 40) return '#f97316';
-  return '#ef4444';
+  if (score >= 80) return 'var(--accent)';
+  if (score >= 60) return 'var(--cyan)';
+  if (score >= 40) return 'var(--sev-medium)';
+  return 'var(--sev-critical)';
 }
 
 function ScoreGauge({ score }: { score: number }) {
   const r = 50, circ = 2 * Math.PI * r;
   const color = getScoreColor(score);
-  const label = score >= 80 ? 'Secure' : score >= 60 ? 'Fair' : score >= 40 ? 'At Risk' : 'Critical';
+  const label = score >= 80 ? 'Excellent' : score >= 60 ? 'Fair' : score >= 40 ? 'Risk Profile' : 'Critical Exposure';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      <svg width={120} height={120} viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={60} cy={60} r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={8} />
-        <circle cx={60} cy={60} r={r} fill="none" stroke={color} strokeWidth={8}
+      <svg width={110} height={110} viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={60} cy={60} r={r} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth={7} />
+        <circle cx={60} cy={60} r={r} fill="none" stroke={color} strokeWidth={7}
           strokeDasharray={circ} strokeDashoffset={circ - (score / 100) * circ}
           strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease' }} />
         <text x={60} y={60} textAnchor="middle" dominantBaseline="central" fill={color}
-          fontSize={22} fontWeight={800}
-          style={{ transform: 'rotate(90deg)', transformOrigin: '60px 60px', fontFamily: 'Space Grotesk, sans-serif' }}>
+          fontSize={20} fontWeight={800}
+          style={{ transform: 'rotate(90deg)', transformOrigin: '60px 60px', fontFamily: 'var(--font-display)' }}>
           {score}
         </text>
       </svg>
-      <span style={{ fontSize: 13, color, fontWeight: 600 }}>{label}</span>
+      <span style={{ fontSize: 11, color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
     </div>
   );
 }
@@ -45,52 +45,41 @@ function ScanningProgress() {
   }, []);
 
   return (
-    <div style={{ padding: '24px 20px' }}>
-      {/* Animated scanner header */}
+    <div style={{ padding: '20px 10px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-        <div style={{ position: 'relative', width: 40, height: 40 }}>
-          <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid rgba(59,130,246,0.2)', borderTopColor: '#3b82f6', animation: 'spin 1s linear infinite' }} />
-          <div style={{ position: 'absolute', inset: 6, borderRadius: '50%', border: '2px solid rgba(0,212,255,0.2)', borderTopColor: '#00d4ff', animation: 'spin 0.6s linear infinite reverse' }} />
-        </div>
+        <div className="spinner spinner-lg" />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>Security Scan Running{dots}</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Auto-refreshing every 3 seconds</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>AI Security Operation running{dots}</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Status dashboard updates dynamically</div>
         </div>
       </div>
 
-      {/* Progress steps */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {SCAN_STEPS.map((s, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{
-              width: 22, height: 22, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              background: i < step ? 'rgba(16,185,129,0.15)' : i === step ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
-              border: `2px solid ${i < step ? '#10b981' : i === step ? '#3b82f6' : 'rgba(255,255,255,0.08)'}`,
-              transition: 'all 0.4s ease',
+              width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              background: i < step ? 'rgba(0, 255, 157, 0.1)' : i === step ? 'rgba(0, 217, 255, 0.1)' : 'rgba(255,255,255,0.02)',
+              border: `1.5px solid ${i < step ? 'var(--accent)' : i === step ? 'var(--cyan)' : 'var(--border-default)'}`,
+              transition: 'all 0.3s ease',
             }}>
               {i < step
-                ? <CheckCircle2 size={12} color="#10b981" />
+                ? <CheckCircle2 size={11} color="var(--accent)" />
                 : i === step
-                  ? <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#3b82f6', animation: 'progress-pulse 1s ease-in-out infinite' }} />
-                  : <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+                  ? <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--cyan)' }} />
+                  : <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--text-muted)' }} />
               }
             </div>
             <span style={{
-              fontSize: 13,
-              color: i < step ? '#10b981' : i === step ? 'var(--text-primary)' : 'var(--text-muted)',
-              fontWeight: i === step ? 600 : 400,
-              transition: 'color 0.4s ease',
+              fontSize: 12,
+              color: i < step ? 'var(--accent)' : i === step ? 'var(--text-primary)' : 'var(--text-muted)',
+              fontWeight: i === step ? 700 : 400,
             }}>{s}{i === step ? dots : ''}</span>
           </div>
         ))}
       </div>
     </div>
   );
-}
-
-function getScanStatusClass(status: string) {
-  const map: Record<string, string> = { COMPLETED: 'status-completed', RUNNING: 'status-running', FAILED: 'status-failed', PENDING: 'status-pending' };
-  return map[status] || 'status-pending';
 }
 
 export default function RepositoryDetailPage() {
@@ -126,7 +115,6 @@ export default function RepositoryDetailPage() {
     }
   };
 
-  // Start/stop polling based on running scan
   useEffect(() => {
     if (hasRunningScan) {
       if (!pollRef.current) {
@@ -175,8 +163,8 @@ export default function RepositoryDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ padding: 40, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div className="spinner" /><span style={{ color: 'var(--text-secondary)' }}>Loading repository...</span>
+      <div style={{ padding: 40, display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
+        <div className="spinner" /><span style={{ color: 'var(--text-secondary)' }}>Loading security profiles...</span>
       </div>
     );
   }
@@ -184,8 +172,8 @@ export default function RepositoryDetailPage() {
   if (!repo) {
     return (
       <div style={{ padding: 40 }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Repository not found.</p>
-        <Link to="/repositories" style={{ color: 'var(--accent-blue)', textDecoration: 'none' }}>← Back</Link>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: 16 }}>Repository details not found.</p>
+        <Link to="/repositories" className="btn btn-secondary btn-sm">← Back</Link>
       </div>
     );
   }
@@ -194,54 +182,54 @@ export default function RepositoryDetailPage() {
   const isSelectedRunning = selectedScan?.status === 'RUNNING' || selectedScan?.status === 'PENDING';
 
   return (
-    <div style={{ padding: 32 }} className="animate-fadeIn">
-      <Link to="/repositories" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 14, marginBottom: 24 }}>
-        <ArrowLeft size={16} /> Back to Repositories
+    <div className="page cyber-grid">
+      <Link to="/repositories" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 13, marginBottom: 20 }}>
+        <ArrowLeft size={14} /> Back to Repositories
       </Link>
 
       {/* Header card */}
       <div className="card" style={{ padding: 24, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <ScoreGauge score={repo.securityScore} />
             <div>
-              <h1 style={{ fontSize: 22, fontWeight: 700, fontFamily: 'Space Grotesk, sans-serif', marginBottom: 4 }}>{repo.repositoryName}</h1>
-              <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 8 }}>{repo.fullName}</div>
-              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <Clock size={12} />{repo.lastScanDate ? `Last scanned ${new Date(repo.lastScanDate).toLocaleString()}` : 'Never scanned'}
+              <h1 style={{ fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 4, color: '#fff' }}>{repo.repositoryName}</h1>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>{repo.fullName}</div>
+              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 11, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Clock size={12} style={{ color: 'var(--accent)' }} />{repo.lastScanDate ? `Scanned ${new Date(repo.lastScanDate).toLocaleString()}` : 'No scan history'}
                 </span>
-                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{scans.length} total scan{scans.length !== 1 ? 's' : ''}</span>
+                <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{scans.length} scan runs</span>
                 {hasRunningScan && (
-                  <span className="badge status-running" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div className="spinner" style={{ width: 10, height: 10, borderWidth: 1.5 }} /> Scanning…
+                  <span className="badge status-running" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <div className="spinner" style={{ width: 10, height: 10, borderWidth: 1.5 }} /> scanning...
                   </span>
                 )}
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <a href={repo.repositoryUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ textDecoration: 'none', fontSize: 13, padding: '8px 14px' }}>
-              <ExternalLink size={14} /> GitHub
+          <div style={{ display: 'flex', gap: 10 }}>
+            <a href={repo.repositoryUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <ExternalLink size={12} /> GitHub
             </a>
-            <button className="btn-primary" onClick={handleScan} disabled={isScanning || hasRunningScan} id="start-scan-btn" style={{ fontSize: 13, padding: '8px 16px' }}>
+            <button className="btn btn-primary btn-sm" onClick={handleScan} disabled={isScanning || hasRunningScan} id="start-scan-btn">
               {isScanning || hasRunningScan
-                ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Scanning…</>
-                : <><Play size={14} /> Run Scan</>}
+                ? <><Loader2 size={12} className="animate-spin" /> scanning...</>
+                : <><Play size={12} /> Run Scan</>}
             </button>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr)) 3fr', gap: 20 }}>
         {/* Scan History Panel */}
-        <div className="card" style={{ padding: 16, alignSelf: 'start' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <Clock size={16} color="var(--accent-blue)" />
-            <h3 style={{ fontWeight: 600, fontSize: 14 }}>Scan History</h3>
+        <div className="card" style={{ padding: 16, alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Clock size={14} style={{ color: 'var(--accent)' }} />
+            <h3 style={{ fontWeight: 700, fontSize: 13, color: '#fff', fontFamily: 'var(--font-display)' }}>Historical Runs</h3>
           </div>
           {scans.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No scans yet. Click "Run Scan" to start.</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: 12 }}>No scan records. Trigger "Run Scan" to construct index.</p>
           ) : (
             scans.map((scan) => {
               const counts = getSeverityCounts(scan);
@@ -252,30 +240,36 @@ export default function RepositoryDetailPage() {
                   key={scan.id}
                   onClick={() => setSelectedScanId(scan.id)}
                   style={{
-                    padding: 12, borderRadius: 8, cursor: 'pointer', marginBottom: 8,
-                    background: isActive ? 'rgba(59,130,246,0.1)' : 'transparent',
-                    border: `1px solid ${isActive ? 'rgba(59,130,246,0.3)' : 'transparent'}`,
-                    transition: 'all 0.2s ease',
+                    padding: 12, borderRadius: 10, cursor: 'pointer',
+                    background: isActive ? 'rgba(0, 255, 157, 0.06)' : 'var(--bg-secondary)',
+                    border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border-subtle)'}`,
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) e.currentTarget.style.borderColor = 'var(--border-default)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) e.currentTarget.style.borderColor = 'var(--border-subtle)';
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{new Date(scan.scanDate).toLocaleDateString()}</span>
-                    <span className={`badge ${getScanStatusClass(scan.status)}`} style={{ fontSize: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
-                      {isRunning && <div className="spinner" style={{ width: 8, height: 8, borderWidth: 1.5 }} />}
-                      {scan.status}
-                    </span>
+                    <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{new Date(scan.scanDate).toLocaleDateString()}</span>
+                    <span className={`badge ${
+                      scan.status === 'COMPLETED' ? 'badge-success' :
+                      scan.status === 'RUNNING' ? 'status-running' : 'badge-critical'
+                    }`} style={{ fontSize: 9 }}>{scan.status}</span>
                   </div>
                   {isRunning ? (
-                    <div style={{ fontSize: 11, color: 'var(--accent-blue)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Zap size={10} /> Scanning in progress…
+                    <div style={{ fontSize: 11, color: 'var(--cyan)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Zap size={10} /> Operation active...
                     </div>
                   ) : (
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                      {counts.CRITICAL > 0 && <span className="badge badge-critical" style={{ fontSize: 10 }}>{counts.CRITICAL}C</span>}
-                      {counts.HIGH > 0 && <span className="badge badge-high" style={{ fontSize: 10 }}>{counts.HIGH}H</span>}
-                      {counts.MEDIUM > 0 && <span className="badge badge-medium" style={{ fontSize: 10 }}>{counts.MEDIUM}M</span>}
-                      {counts.LOW > 0 && <span className="badge badge-low" style={{ fontSize: 10 }}>{counts.LOW}L</span>}
-                      {scan._count?.vulnerabilities === 0 && <span style={{ fontSize: 11, color: '#10b981' }}>✅ Clean</span>}
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      {counts.CRITICAL > 0 && <span className="badge badge-critical" style={{ fontSize: 9, padding: '2px 5px' }}>{counts.CRITICAL}C</span>}
+                      {counts.HIGH > 0 && <span className="badge badge-high" style={{ fontSize: 9, padding: '2px 5px' }}>{counts.HIGH}H</span>}
+                      {counts.MEDIUM > 0 && <span className="badge badge-medium" style={{ fontSize: 9, padding: '2px 5px' }}>{counts.MEDIUM}M</span>}
+                      {counts.LOW > 0 && <span className="badge badge-low" style={{ fontSize: 9, padding: '2px 5px' }}>{counts.LOW}L</span>}
+                      {scan._count?.vulnerabilities === 0 && <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 700 }}>✓ SECURE</span>}
                     </div>
                   )}
                 </div>
@@ -294,16 +288,16 @@ export default function RepositoryDetailPage() {
                 <>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
                     <div>
-                      <h3 style={{ fontWeight: 600, fontSize: 15, marginBottom: 6 }}>
-                        Scan from {new Date(selectedScan.scanDate).toLocaleString()}
+                      <h3 style={{ fontWeight: 700, fontSize: 14, color: '#fff', fontFamily: 'var(--font-display)', marginBottom: 4 }}>
+                        Findings Audit: {new Date(selectedScan.scanDate).toLocaleDateString()}
                       </h3>
-                      <span className={`badge ${getScanStatusClass(selectedScan.status)}`}>{selectedScan.status}</span>
+                      <span className={`badge ${selectedScan.status === 'COMPLETED' ? 'badge-success' : 'badge-critical'}`}>{selectedScan.status}</span>
                     </div>
                     {selectedCounts && (
-                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                        {selectedCounts.CRITICAL > 0 && <span className="badge badge-critical">{selectedCounts.CRITICAL} Critical</span>}
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {selectedCounts.CRITICAL > 0 && <span className="badge badge-critical">{selectedCounts.CRITICAL} Crit</span>}
                         {selectedCounts.HIGH > 0 && <span className="badge badge-high">{selectedCounts.HIGH} High</span>}
-                        {selectedCounts.MEDIUM > 0 && <span className="badge badge-medium">{selectedCounts.MEDIUM} Medium</span>}
+                        {selectedCounts.MEDIUM > 0 && <span className="badge badge-medium">{selectedCounts.MEDIUM} Med</span>}
                         {selectedCounts.LOW > 0 && <span className="badge badge-low">{selectedCounts.LOW} Low</span>}
                       </div>
                     )}
@@ -311,9 +305,9 @@ export default function RepositoryDetailPage() {
 
                   {selectedScan.vulnerabilities?.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                      <Shield size={40} style={{ margin: '0 auto 12px', color: '#10b981' }} />
-                      <p style={{ color: '#10b981', fontWeight: 600 }}>No vulnerabilities found!</p>
-                      <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 4 }}>This repository is clean.</p>
+                      <Shield size={40} style={{ margin: '0 auto 12px', color: 'var(--accent)' }} />
+                      <p style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 14 }}>Zero vulnerabilities found</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 4 }}>Codebase complies with all scanner safety thresholds.</p>
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -323,30 +317,30 @@ export default function RepositoryDetailPage() {
                           onClick={() => navigate(`/vulnerabilities/${v.id}`)}
                           id={`vuln-item-${v.id}`}
                           style={{
-                            padding: 14, borderRadius: 8, cursor: 'pointer',
-                            background: 'rgba(255,255,255,0.02)',
-                            border: '1px solid var(--border)',
-                            transition: 'all 0.2s ease',
+                            padding: 14, borderRadius: 10, cursor: 'pointer',
+                            background: 'var(--bg-secondary)',
+                            border: '1px solid var(--border-subtle)',
+                            transition: 'all 0.15s ease',
                           }}
                           onMouseEnter={e => {
-                            (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-glow)';
-                            (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.04)';
+                            e.currentTarget.style.borderColor = 'rgba(0, 255, 157, 0.2)';
+                            e.currentTarget.style.background = 'var(--bg-card-hover)';
                           }}
                           onMouseLeave={e => {
-                            (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)';
+                            e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                            e.currentTarget.style.background = 'var(--bg-secondary)';
                           }}
                         >
-                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                            <span className={`badge badge-${v.severity.toLowerCase()}`} style={{ flexShrink: 0, marginTop: 1 }}>{v.severity}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <span className={`badge badge-${v.severity.toLowerCase()}`} style={{ flexShrink: 0 }}>{v.severity}</span>
                             <div style={{ flex: 1, overflow: 'hidden' }}>
-                              <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)', marginBottom: 4 }}>{v.title}</div>
-                              <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                              <div style={{ fontWeight: 700, fontSize: 13, color: '#fff', marginBottom: 2 }}>{v.title}</div>
+                              <div style={{ fontSize: 11, color: 'var(--text-secondary)', display: 'flex', gap: 12, flexWrap: 'wrap', fontFamily: 'var(--font-mono)' }}>
                                 {v.filePath && <span>📄 {v.filePath}{v.lineNumber ? `:${v.lineNumber}` : ''}</span>}
-                                <span>🔍 {v.scannerSource}</span>
+                                <span style={{ color: 'var(--text-muted)' }}>scanner: {v.scannerSource}</span>
                               </div>
                             </div>
-                            <span style={{ fontSize: 11, color: 'var(--accent-blue)', whiteSpace: 'nowrap', marginTop: 2 }}>View →</span>
+                            <span style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>Inspect →</span>
                           </div>
                         </div>
                       ))}
@@ -357,8 +351,8 @@ export default function RepositoryDetailPage() {
             </div>
           ) : (
             <div className="card" style={{ padding: 60, textAlign: 'center' }}>
-              <AlertTriangle size={40} style={{ margin: '0 auto 12px', color: 'var(--text-muted)' }} />
-              <p style={{ color: 'var(--text-muted)' }}>Run a scan to see findings</p>
+              <AlertTriangle size={40} style={{ margin: '0 auto 12px', color: 'var(--text-muted)', display: 'block' }} />
+              <p style={{ color: 'var(--text-secondary)' }}>Click "Run Scan" to extract repository metrics.</p>
             </div>
           )}
         </div>

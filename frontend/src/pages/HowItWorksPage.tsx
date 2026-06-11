@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Sparkles, GitBranch, ArrowRight, Play, CheckCircle2, ChevronRight, Lock, Brain, Wrench } from 'lucide-react';
+import { Shield, Sparkles, GitBranch, ArrowRight, CheckCircle2, ChevronRight, Lock, Brain, Wrench } from 'lucide-react';
 
 export default function HowItWorksPage() {
   const { token } = useAuth();
@@ -10,124 +10,115 @@ export default function HowItWorksPage() {
   const steps = [
     {
       number: '01',
-      title: 'Connect Repositories',
-      icon: <GitBranch size={22} style={{ color: '#818cf8' }} />,
-      desc: 'Connect your GitHub account securely in one click. Import only the repositories you want to secure.',
-      color: '#818cf8',
-      details: ['One-click GitHub OAuth authorization', 'Scan public or private repositories', 'Zero read/write permission to code storage (privacy first)']
+      title: 'GitHub Authentication Sync',
+      icon: <GitBranch size={18} style={{ color: 'var(--cyan)' }} />,
+      desc: 'Connect your GitHub workspace safely using zero-retention protocols. Import only repositories you wish to scan.',
+      color: 'var(--cyan)',
+      details: ['One-click GitHub OAuth authorization', 'Audits both public and private code repositories', 'Strict read-only repository scope mappings']
     },
     {
       number: '02',
-      title: 'Run Automated Security Scans',
-      icon: <Shield size={22} style={{ color: '#00d4ff' }} />,
-      desc: 'Run powerful automated security scanners concurrently. Spot vulnerabilities, leaks, and outdated packages.',
-      color: '#00d4ff',
-      details: ['Semgrep: Custom rules for static code analysis (SAST)', 'Gitleaks: Check hardcoded credentials, keys, and tokens', 'Trivy: Scan dependencies and third-party package security']
+      title: 'Multi-Core Scanner Execution',
+      icon: <Shield size={18} style={{ color: 'var(--accent)' }} />,
+      desc: 'Execute static analysis rules (Semgrep SAST), secrets audits (Gitleaks), and software packages composition scanning (Trivy).',
+      color: 'var(--accent)',
+      details: ['Semgrep checks code syntax blocks against rule indexes', 'Gitleaks scan intercepts hardcoded API tokens & keys', 'Trivy composition analysis audits package CVEs']
     },
     {
       number: '03',
-      title: 'Gemini AI Analysis',
-      icon: <Sparkles size={22} style={{ color: '#a78bfa' }} />,
-      desc: 'Our AI engine analyzes the detected security issues to provide actionable code explanations and exploit severity.',
-      color: '#a78bfa',
-      details: ['Understands precise code context and flow', 'Generates easy-to-read explanations of why it is dangerous', 'Identifies potential attack scenarios']
+      title: 'Gemini AI Threat Triage',
+      icon: <Brain size={18} style={{ color: 'var(--cyan)' }} />,
+      desc: 'Our intelligence engine triages code context to clarify root vulnerability vectors, potential exploits, and threat levels.',
+      color: 'var(--cyan)',
+      details: ['Traces control flow pathways to identify vulnerabilities', 'Explains vulnerability context in plain, clear language', 'Triage matches threats to CVE standards database']
     },
     {
       number: '04',
-      title: 'Remediate & Fix',
-      icon: <Wrench size={22} style={{ color: '#34d399' }} />,
-      desc: 'Get precise code remediation suggestions to resolve vulnerabilities. Copy fixed code directly.',
-      color: '#34d399',
-      details: ['Before-and-after code block examples', 'Step-by-step resolution documentation', 'Interactive copy features to speed up fixes']
+      title: 'AI Remediation & Patching',
+      icon: <Wrench size={18} style={{ color: 'var(--accent)' }} />,
+      desc: 'Receive copy-paste ready safe code patches generated for your codebase structure. Review diff changes side-by-side.',
+      color: 'var(--accent)',
+      details: ['Produces complete corrected replacement patches', 'Step-by-step code correction documentation', 'Fast one-click copying straight to your editor workspace']
     }
   ];
 
   return (
-    <div style={{
-      padding: '40px 32px', maxWidth: 1000, margin: '0 auto', minHeight: '100vh',
-      color: '#f3f4f6', fontFamily: 'Inter, sans-serif'
-    }} className="animate-fadeIn">
+    <div className="page cyber-grid">
       
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40, flexWrap: 'wrap', gap: 16 }}>
+      <div className="page-header">
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#ffffff' }}>How Bug Bounty AI Works</h1>
-          <p style={{ color: '#9ca3af', fontSize: 14, marginTop: 4 }}>Understand our automated security scanning and AI analysis pipeline</p>
+          <h1 className="page-title">Operation Pipeline Architecture</h1>
+          <p className="page-subtitle">Understand how scanners index repositories, run rulesets, and invoke Gemini AI remediation models</p>
         </div>
         <button
           onClick={() => navigate(token ? '/dashboard' : '/login')}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-            padding: '10px 20px', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#f3f4f6',
-            fontWeight: 600, transition: 'all 0.2s'
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+          className="btn btn-ghost btn-sm"
         >
           Back to {token ? 'Dashboard' : 'Home'}
         </button>
       </div>
 
       {/* Hero Interactive Flow diagram */}
-      <div className="card animate-fadeIn" style={{
-        padding: 30, marginBottom: 40, border: '1px solid rgba(99, 102, 241, 0.2)',
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.03))'
+      <div className="card" style={{
+        padding: 30, marginBottom: 24, border: '1px solid rgba(0, 255, 157, 0.15)',
+        background: 'linear-gradient(135deg, rgba(0, 255, 157, 0.04), rgba(0, 217, 255, 0.02))'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
           {[
-            { label: 'GitHub OAuth', desc: 'Secure Integration' },
-            { label: 'Multi-Scanners', desc: 'Semgrep / Gitleaks / Trivy' },
-            { label: 'Gemini AI API', desc: 'Explain & Remediate' },
-            { label: 'Developer Fix', desc: 'Secure Codebase' }
+            { label: 'GitHub Sync', desc: 'Secure Handshake' },
+            { label: 'Security Scanners', desc: 'SAST, Secrets & CVEs' },
+            { label: 'Gemini Agent', desc: 'Explains threat logic' },
+            { label: 'Remediation', desc: 'Deploy correction patch' }
           ].map((node, i) => (
             <React.Fragment key={i}>
               <div style={{ textAlign: 'center', flex: 1, minWidth: 150 }}>
                 <div style={{
-                  width: 38, height: 38, borderRadius: '50%', background: 'rgba(99, 102, 241, 0.15)',
-                  border: '1px solid rgba(99, 102, 241, 0.3)', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', margin: '0 auto 10px', fontWeight: 700, color: '#818cf8', fontSize: 14
+                  width: 38, height: 38, borderRadius: '50%', background: 'rgba(0, 255, 157, 0.08)',
+                  border: '1px solid rgba(0, 255, 157, 0.25)', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', margin: '0 auto 10px', fontWeight: 700, color: 'var(--accent)', fontSize: 13,
+                  boxShadow: '0 0 12px rgba(0, 255, 157, 0.15)'
                 }}>
                   {i + 1}
                 </div>
-                <h4 style={{ fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>{node.label}</h4>
-                <p style={{ fontSize: 11, color: '#9ca3af' }}>{node.desc}</p>
+                <h4 style={{ fontSize: 13, fontWeight: 700, color: '#ffffff', marginBottom: 2, fontFamily: 'var(--font-display)' }}>{node.label}</h4>
+                <p style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{node.desc}</p>
               </div>
-              {i < 3 && <ArrowRight size={18} style={{ color: '#4b5563', alignSelf: 'center', opacity: 0.5 }} />}
+              {i < 3 && <ArrowRight size={16} style={{ color: 'var(--text-muted)', alignSelf: 'center', opacity: 0.5 }} />}
             </React.Fragment>
           ))}
         </div>
       </div>
 
       {/* Detailed Steps Grid */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {steps.map((step, i) => (
-          <div key={i} className="card animate-fadeIn" style={{
+          <div key={i} className="card" style={{
             padding: 24, display: 'grid', gridTemplateColumns: '80px 1fr', gap: 24, alignItems: 'start'
           }}>
             <div style={{
-              fontSize: 36, fontWeight: 800, color: step.color,
-              fontFamily: 'Space Grotesk, sans-serif', opacity: 0.4,
-              textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.06)', paddingRight: 20
+              fontSize: 32, fontWeight: 800, color: step.color,
+              fontFamily: 'var(--font-display)', opacity: 0.4,
+              textAlign: 'center', borderRight: '1.5px solid var(--border-subtle)', paddingRight: 20
             }}>
               {step.number}
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
                 <div style={{
-                  width: 32, height: 32, borderRadius: 8, background: `${step.color}15`,
+                  width: 32, height: 32, borderRadius: 8, background: `${step.color}18`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                   {step.icon}
                 </div>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif' }}>{step.title}</h3>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', fontFamily: 'var(--font-display)' }}>{step.title}</h3>
               </div>
-              <p style={{ fontSize: 14, color: '#9ca3af', lineHeight: 1.6, marginBottom: 16 }}>{step.desc}</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 10 }}>
+              <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 14 }}>{step.desc}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 8 }}>
                 {step.details.map((detail, idx) => (
                   <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                     <span style={{ color: step.color, marginTop: 2 }}>✓</span>
-                    <span style={{ fontSize: 12, color: '#d1d5db', lineHeight: 1.4 }}>{detail}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.45 }}>{detail}</span>
                   </div>
                 ))}
               </div>

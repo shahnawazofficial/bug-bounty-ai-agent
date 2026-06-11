@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Star, Crown, Check, Lock, ArrowLeft } from 'lucide-react';
+import { Shield, Star, Crown, Check, Lock, ArrowLeft, Zap } from 'lucide-react';
 
 export default function PricingPage() {
   const { token } = useAuth();
@@ -10,8 +10,8 @@ export default function PricingPage() {
   const plans = [
     {
       name: 'Basic',
-      icon: <Shield size={20} style={{ color: '#10b981' }} />,
-      iconBg: 'rgba(16, 185, 129, 0.1)',
+      icon: <Shield size={18} style={{ color: 'var(--cyan)' }} />,
+      iconBg: 'var(--cyan-dim)',
       desc: 'Perfect for getting started',
       price: '10',
       features: [
@@ -22,18 +22,18 @@ export default function PricingPage() {
         'Scan History (7 days)',
         'Community Support'
       ],
-      btnText: 'Get Started for ₹10',
+      btnText: 'Activate Basic (₹10)',
       btnStyle: {
         background: 'transparent',
-        border: '1px solid rgba(16, 185, 129, 0.3)',
-        color: '#10b981'
+        border: '1px solid var(--border-strong)',
+        color: '#ffffff'
       },
       popular: false
     },
     {
       name: 'Pro',
-      icon: <Star size={20} style={{ color: '#a78bfa' }} />,
-      iconBg: 'rgba(167, 139, 250, 0.1)',
+      icon: <Zap size={18} style={{ color: 'var(--accent)' }} />,
+      iconBg: 'var(--accent-dim)',
       desc: 'For developers & security enthusiasts',
       price: '50',
       features: [
@@ -46,18 +46,19 @@ export default function PricingPage() {
         'Scan History (30 days)',
         'Priority Support'
       ],
-      btnText: 'Get Started for ₹50',
+      btnText: 'Activate Pro (₹50)',
       btnStyle: {
-        background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
+        background: 'var(--accent)',
         border: 'none',
-        color: '#ffffff'
+        color: '#000000',
+        boxShadow: '0 0 16px rgba(0, 255, 157, 0.2)'
       },
       popular: true
     },
     {
       name: 'Premium',
-      icon: <Crown size={20} style={{ color: '#3b82f6' }} />,
-      iconBg: 'rgba(59, 130, 246, 0.1)',
+      icon: <Crown size={18} style={{ color: '#FFD700' }} />,
+      iconBg: 'rgba(255, 215, 0, 0.08)',
       desc: 'For professionals & teams',
       price: '100',
       features: [
@@ -71,83 +72,68 @@ export default function PricingPage() {
         'Email Alerts & Notifications',
         'Priority Support'
       ],
-      btnText: 'Get Started for ₹100',
+      btnText: 'Activate Premium (₹100)',
       btnStyle: {
-        background: '#2563eb',
-        border: 'none',
-        color: '#ffffff'
+        background: 'transparent',
+        border: '1px solid var(--accent)',
+        color: 'var(--accent)'
       },
       popular: false
     }
   ];
 
   return (
-    <div style={{
-      padding: '40px 24px', maxWidth: 1100, margin: '0 auto', minHeight: '100vh',
-      color: '#f3f4f6', fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', justifyContent: 'center'
-    }} className="animate-fadeIn">
+    <div className="page cyber-grid" style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       
       {/* Header Back Button */}
-      <div style={{ marginBottom: 30 }}>
+      <div style={{ marginBottom: 24 }}>
         <button
           onClick={() => navigate(token ? '/dashboard' : '/login')}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-            padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 13, color: '#9ca3af',
-            fontWeight: 500, transition: 'all 0.2s'
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-            e.currentTarget.style.color = '#ffffff';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-            e.currentTarget.style.color = '#9ca3af';
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          <ArrowLeft size={14} /> Back to {token ? 'Dashboard' : 'Home'}
+          <ArrowLeft size={13} /> Back to {token ? 'Dashboard' : 'Home'}
         </button>
       </div>
 
       {/* Main Titles */}
-      <div style={{ textAlign: 'center', marginBottom: 48 }}>
+      <div style={{ textAlign: 'center', marginBottom: 40 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
-          background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.15)',
-          padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, color: '#818cf8',
-          textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16
+          background: 'var(--accent-dim)', border: '1px solid rgba(0, 255, 157, 0.25)',
+          padding: '6px 14px', borderRadius: 20, fontSize: 10, fontWeight: 700, color: 'var(--accent)',
+          textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 16
         }}>
-          💎 Simple, Transparent Pricing
+          💎 Premium Protection Tiers
         </div>
         <h1 style={{
-          fontSize: '36px', fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif',
+          fontSize: '32px', fontWeight: 800, fontFamily: 'var(--font-display)',
           color: '#ffffff', letterSpacing: '-0.02em', margin: '0 0 12px 0'
         }}>
-          Choose the Plan That Fits Your <span style={{ color: '#818cf8' }}>Security</span> Needs
+          Transparent Cybersecurity Plans
         </h1>
-        <p style={{ color: '#9ca3af', fontSize: 14, maxWidth: 600, margin: '0 auto', lineHeight: 1.6 }}>
-          Start small and scale as you grow. All plans include core security scanning powered by AI, Semgrep, Gitleaks, and Trivy.
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14, maxWidth: 600, margin: '0 auto', lineHeight: 1.6 }}>
+          Choose your security tier. Instantly scan commits, catch credentials exposure, and generate AI-guided secure code patches.
         </p>
       </div>
 
       {/* Pricing Cards Grid */}
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, alignItems: 'stretch',
-        marginBottom: 40
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, alignItems: 'stretch',
+        marginBottom: 32
       }}>
         {plans.map((plan, i) => (
           <div
             key={i}
+            className="card"
             style={{
-              background: '#0a0f1d',
-              border: plan.popular ? '2px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.05)',
+              background: 'var(--bg-card)',
+              border: plan.popular ? '2px solid var(--accent)' : '1px solid var(--border-default)',
               borderRadius: 16,
               padding: '30px 24px',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
-              boxShadow: plan.popular ? '0 0 30px rgba(99, 102, 241, 0.15)' : 'none',
+              boxShadow: plan.popular ? '0 0 32px rgba(0, 255, 157, 0.15)' : 'none',
               transform: plan.popular ? 'scale(1.02)' : 'none',
               zIndex: plan.popular ? 2 : 1
             }}
@@ -156,10 +142,10 @@ export default function PricingPage() {
             {plan.popular && (
               <div style={{
                 position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
-                background: '#6366f1', color: '#ffffff', fontSize: 9, fontWeight: 800,
-                padding: '4px 12px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: '0.05em'
+                background: 'var(--accent)', color: '#000000', fontSize: 9, fontWeight: 800,
+                padding: '4px 14px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: '0.06em'
               }}>
-                Most Popular
+                Recommended
               </div>
             )}
 
@@ -172,50 +158,37 @@ export default function PricingPage() {
                 {plan.icon}
               </div>
               <div>
-                <h3 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', margin: 0, fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', margin: 0, fontFamily: 'var(--font-display)' }}>
                   {plan.name}
                 </h3>
-                <p style={{ fontSize: 11, color: '#6b7280', margin: '2px 0 0 0' }}>{plan.desc}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '2px 0 0 0' }}>{plan.desc}</p>
               </div>
             </div>
 
             {/* Price section */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
-              <span style={{ fontSize: 20, fontWeight: 600, color: plan.popular ? '#818cf8' : '#ffffff' }}>₹</span>
-              <span style={{ fontSize: 36, fontWeight: 800, color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif' }}>{plan.price}</span>
-              <span style={{ fontSize: 12, color: '#4b5563' }}>/month</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 20 }}>
+              <span style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-secondary)' }}>₹</span>
+              <span style={{ fontSize: 32, fontWeight: 700, color: '#ffffff', fontFamily: 'var(--font-display)' }}>{plan.price}</span>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>/month</span>
             </div>
 
             {/* Features list */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1, marginBottom: 28 }}>
               {plan.features.map((feature, idx) => (
                 <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                  <span style={{ color: plan.popular ? '#818cf8' : '#34d399', fontSize: 13, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 12, color: '#d1d5db', lineHeight: 1.4 }}>{feature}</span>
+                  <span style={{ color: 'var(--accent)', fontSize: 12, marginTop: 1 }}>✓</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.45 }}>{feature}</span>
                 </div>
               ))}
             </div>
 
             {/* CTA Button */}
             <button
+              onClick={() => alert(`Redirecting to subscription workflow for plan ${plan.name}...`)}
+              className="btn btn-lg"
               style={{
-                width: '100%', padding: '12px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', gap: 8, ...plan.btnStyle
-              }}
-              onMouseEnter={e => {
-                if (plan.name === 'Basic') {
-                  e.currentTarget.style.background = 'rgba(16, 185, 129, 0.05)';
-                } else {
-                  e.currentTarget.style.opacity = '0.9';
-                }
-              }}
-              onMouseLeave={e => {
-                if (plan.name === 'Basic') {
-                  e.currentTarget.style.background = 'transparent';
-                } else {
-                  e.currentTarget.style.opacity = '1';
-                }
+                width: '100%',
+                ...plan.btnStyle
               }}
             >
               {plan.btnText}
@@ -225,14 +198,14 @@ export default function PricingPage() {
       </div>
 
       {/* Footer Info section */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#9ca3af' }}>
-          <Shield size={12} style={{ color: '#818cf8' }} />
-          <span>All plans include bank-level security and data privacy.</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+          <Shield size={12} style={{ color: 'var(--accent)' }} />
+          <span>All subscriptions processed securely via encrypted channels.</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#4b5563' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-disabled)' }}>
           <Lock size={10} />
-          <span>Cancel anytime. No hidden fees.</span>
+          <span>No lock-in contracts. Downgrade or terminate at any cycle end.</span>
         </div>
       </div>
 
