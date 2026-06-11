@@ -1,5 +1,10 @@
 name: bugbountyai-frontend
 region: blr
+domains:
+  - domain: bugbountyai.in
+    type: PRIMARY
+  - domain: www.bugbountyai.in
+    type: ALIAS
 static_sites:
   - name: frontend
     source_dir: /frontend

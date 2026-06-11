@@ -1,5 +1,8 @@
 name: bugbountyai-backend
 region: blr
+domains:
+  - domain: api.bugbountyai.in
+    type: PRIMARY
 services:
   - name: backend
     source_dir: /backend

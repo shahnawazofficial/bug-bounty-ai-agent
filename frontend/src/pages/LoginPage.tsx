@@ -72,35 +72,19 @@ export default function LoginPage() {
 
         {/* Center Links */}
         <nav style={{ display: 'flex', gap: 32 }}>
-          {['Features', 'How it Works', 'Pricing', 'Docs', 'Blog'].map((link) => (
-            link === 'How it Works' ? (
-              <a key={link} href="/how-it-works" style={{
-                fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = '#f3f4f6'}
-              onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}
-              >
-                {link}
-              </a>
-            ) : link === 'Pricing' ? (
-              <a key={link} href="/pricing" style={{
-                fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = '#f3f4f6'}
-              onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}
-              >
-                {link}
-              </a>
-            ) : (
-              <a key={link} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} style={{
-                fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = '#f3f4f6'}
-              onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}
-              >
-                {link}
-              </a>
-            )
+          {([
+            { label: 'Features', href: '#features-section' },
+            { label: 'How it Works', href: '/how-it-works' },
+            { label: 'Pricing', href: '/pricing' },
+          ] as const).map((link) => (
+            <a key={link.label} href={link.href} id={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`} style={{
+              fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f3f4f6'}
+            onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}
+            >
+              {link.label}
+            </a>
           ))}
         </nav>
 
@@ -202,12 +186,15 @@ export default function LoginPage() {
               <ChevronRight size={16} />
             </button>
 
-            <button
+            <a
+              href="#features-section"
+              id="view-demo-btn"
               style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)',
                 color: '#e5e7eb', padding: '14px 28px', borderRadius: 10,
-                fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s'
+                fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+                textDecoration: 'none'
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
@@ -219,8 +206,8 @@ export default function LoginPage() {
               }}
             >
               <Play size={16} fill="currentColor" />
-              View Demo
-            </button>
+              Explore Features
+            </a>
           </div>
 
           {/* Secure disclaimer */}
@@ -428,7 +415,7 @@ export default function LoginPage() {
       </section>
 
       {/* Powerful Features Grid Section */}
-      <section style={{ position: 'relative', zIndex: 10, padding: '100px 48px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+      <section id="features-section" style={{ position: 'relative', zIndex: 10, padding: '100px 48px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
           <span style={{
             fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
