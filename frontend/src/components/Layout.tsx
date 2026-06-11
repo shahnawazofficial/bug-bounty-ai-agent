@@ -130,13 +130,14 @@ export default function Layout({ children }: Props) {
               <p style={{ fontSize: 10, color: '#9ca3af', lineHeight: 1.4, marginBottom: 10 }}>
                 Unlock advanced scans, custom rules, and priority support.
               </p>
-              <button style={{
+              <Link to="/pricing" style={{
                 width: '100%', padding: '8px 12px', background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
                 border: 'none', borderRadius: 8, color: '#ffffff', fontSize: 11, fontWeight: 600,
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                textDecoration: 'none'
               }}>
                 <Sparkles size={12} /> Upgrade Now
-              </button>
+              </Link>
             </div>
           </div>
         )}

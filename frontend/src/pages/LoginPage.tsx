@@ -82,6 +82,15 @@ export default function LoginPage() {
               >
                 {link}
               </a>
+            ) : link === 'Pricing' ? (
+              <a key={link} href="/pricing" style={{
+                fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#f3f4f6'}
+              onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}
+              >
+                {link}
+              </a>
             ) : (
               <a key={link} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} style={{
                 fontSize: 14, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500
